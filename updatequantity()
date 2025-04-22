@@ -1,0 +1,56 @@
+const products = [
+  { id: 1, name: "Aloe Vera", price: 5, image: "https://source.unsplash.com/featured/?aloe,plant" },
+  { id: 2, name: "Peace Lily", price: 8, image: "https://source.unsplash.com/featured/?peace-lily" },
+  { id: 3, name: "Spider Plant", price: 6, image: "https://source.unsplash.com/featured/?spider-plant" },
+  { id: 4, name: "Fiddle Leaf Fig", price: 15, image: "https://source.unsplash.com/featured/?fiddle-leaf-fig" }
+];
+
+// Cart stores items as { product, quantity }
+let cartItems = [];
+
+function addToCart(productId) {
+  const product = products.find(p => p.id === productId);
+  const existingItem = cartItems.find(item => item.product.id === productId);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cartItems.push({ product, quantity: 1 });
+  }
+
+  updateCartCount();
+  renderCartPreview();
+}
+
+function updateCartCount() {
+  const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  document.getElementById('cart-count').textContent = totalCount;
+}
+
+function renderCartPreview() {
+  const cartPreview = document.getElementById('cart-preview');
+  cartPreview.innerHTML = '';
+
+  cartItems.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.product.name} x ${item.quantity} - $${item.product.price * item.quantity}`;
+    cartPreview.appendChild(li);
+  });
+}
+
+function displayProducts() {
+  const container = document.getElementById('product-list');
+  products.forEach(product => {
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" />
+      <h3>${product.name}</h3>
+      <p>$${product.price}</p>
+      <button onclick="addToCart(${product.id})">Add to Cart</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+displayProducts();
