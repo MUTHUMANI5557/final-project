@@ -1,0 +1,42 @@
+const products = [
+  { id: 1, name: "Aloe Vera", price: 5, image: "https://source.unsplash.com/featured/?aloe,plant" },
+  { id: 2, name: "Peace Lily", price: 8, image: "https://source.unsplash.com/featured/?peace-lily" },
+  { id: 3, name: "Spider Plant", price: 6, image: "https://source.unsplash.com/featured/?spider-plant" },
+  { id: 4, name: "Fiddle Leaf Fig", price: 15, image: "https://source.unsplash.com/featured/?fiddle-leaf-fig" }
+];
+
+let cartItems = [];
+
+function addToCart(productId) {
+  const product = products.find(p => p.id === productId);
+  cartItems.push(product);
+  document.getElementById('cart-count').textContent = cartItems.length;
+  renderCartPreview();
+}
+
+function renderCartPreview() {
+  const cartPreview = document.getElementById('cart-preview');
+  cartPreview.innerHTML = '';
+  cartItems.slice(-3).forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.name} - $${item.price}`;
+    cartPreview.appendChild(li);
+  });
+}
+
+function displayProducts() {
+  const container = document.getElementById('product-list');
+  products.forEach(product => {
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" />
+      <h3>${product.name}</h3>
+      <p>$${product.price}</p>
+      <button onclick="addToCart(${product.id})">Add to Cart</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+displayProducts();
